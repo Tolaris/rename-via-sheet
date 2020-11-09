@@ -41,15 +41,13 @@ Dry run:
 
 ```
 cd /path/to/files
-/home/tjwagner/Private/src/rename-via-sheet/rename-via-sheet.py -s
-1yaaa-aaaaaaaaaaaaaaaaaaaaaaaaaaaaa-aaaaaaaa -n
+rename-via-sheet.py -s 1yaaa-aaaaaaaaaaaaaaaaaaaaaaaaaaaaa-aaaaaaaa -n
 ```
 
 Actually rename:
 
 ```
-/home/tjwagner/Private/src/rename-via-sheet/rename-via-sheet.py -s
-1yaaa-aaaaaaaaaaaaaaaaaaaaaaaaaaaaa-aaaaaaaa
+rename-via-sheet.py -s 1yaaa-aaaaaaaaaaaaaaaaaaaaaaaaaaaaa-aaaaaaaa
 ```
 
 ## Getting a Google Sheets API key
