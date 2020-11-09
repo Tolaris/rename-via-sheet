@@ -24,10 +24,10 @@ What is ignored:
 Pseudocode:
 
  * for each pair:
-  * generate a unique tempfile
+   * generate a unique tempfile
  * for each pair in row order from to bottom:
-  * rename source to tempfile
-  * rename tempfile to destination
+   * rename source to tempfile
+   * rename tempfile to destination
 
 Therefore you can swap baz.txt and qux.txt without risk of overwriting each
 other.
