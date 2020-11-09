@@ -1,0 +1,7 @@
+# Google Sheets API auth token
+# https://developers.google.com/sheets/api/quickstart/python
+credentials.json
+credentials_token.pickle
+
+# Editor and OS files
+.~*#
