@@ -14,6 +14,8 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
+# apt-get install python3-googleapi python3-google-auth-oauthlib
+
 """Rename files given a matrix in Google Sheets."""
 
 from googleapiclient.discovery import build
