@@ -16,6 +16,9 @@
 
 # apt-get install python3-googleapi python3-google-auth-oauthlib
 
+# WARNING: there are race conditions here, don't modify files during rename.
+#     Ensure you have RW access to the local directory to perform renames.
+
 """Rename files given a matrix in Google Sheets."""
 
 from googleapiclient.discovery import build
@@ -82,27 +85,33 @@ def renameFiles(filenames):
   # Avoids namespace collisions in source,destination sets by using intermediate
   # temp files. Will overwrite any other destination files that may exist.
   #
-  # pseudocode:
+  # when performing a rename, we:
   #   for each pair, generate a unique tempfile
   #   for each pair, rename source to temp
   #   for each pair, rename temp to destination
-  size = len(filenames)
-  source = size*[None]
-  destination = size*[None]
-  temp = size*[None]
-  if args.dry_run:
-    for src,dest in filenames:
+  renames = []
+  for src, dest in filenames:
+    if src == dest:
+      print('Skipping "{}", source and destination are the same.'.format(src))
+      continue
+    if args.dry_run:
       print('Dry run, not renaming "{}" to "{}"'.format(src, dest))
+      continue
+    # check if every source file exists first before beginning renames
+    if not os.path.exists(src):
+      print('Skipping "{}", file not found'.format(src))
+      continue
+    temp = tempfile.NamedTemporaryFile(delete=False,dir=os.getcwd()).name
+    print('Renaming "{}" to "{}" [tmp: {}]'.format(src, dest, temp))
+    renames.append([src,dest,temp])
+  if args.dry_run:
+    for src, dest, temp in renames:
+      os.unlink(temp)
   else:
-    for i in range(size):
-      source[i] = filenames[i][0]
-      destination[i] = filenames[i][1]
-      temp[i] = tempfile.NamedTemporaryFile(delete=False,dir=os.getcwd()).name
-      print('Renaming "{}" to "{}"'.format(source[i], destination[i]))
-    for i in range(size):
-      os.replace(src=source[i],dst=temp[i])
-    for i in range(size):
-      os.replace(src=temp[i],dst=destination[i])
+    for src, dest, temp in renames:
+      os.replace(src=src,dst=temp)
+    for src, dest, temp in renames:
+      os.replace(src=temp,dst=dest)
 
 
 if __name__ == '__main__':
